@@ -84,7 +84,7 @@ func (sp *StreamingProcess) buildCommand(job *models.Job) []string {
 
 	filterString := "[0:v]drawtext=text='REPLACE_ME':fontsize=42:fontcolor=white:x=50+500*abs(sin(t/2)):y=(h-text_h)/3:box=1:boxcolor=black@0.7,drawtext=text='Frame %{frame_num}':fontsize=28:fontcolor=cyan:x=10:y=h-40:box=1:boxcolor=black@0.7[v]; [1:a]aloop=loop=-1:size=22050[a]"
 	filterString = strings.ReplaceAll(filterString, "REPLACE_ME", text)
-	host := fmt.Sprintf("http://0.0.0.0:%d", config.DEFAULT_SERVER_PORT)
+	host := fmt.Sprintf("http://localhost:%d", config.DEFAULT_SERVER_PORT)
 	job.PlaybackURLs = []models.PlaybackURLs{
 		{
 			Format: models.JobOutputFormatDASH,

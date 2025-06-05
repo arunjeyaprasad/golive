@@ -37,9 +37,7 @@ func getMediaHandler() http.HandlerFunc {
 			// For other media files, set the appropriate content type
 			w.Header().Set("Content-Type", "application/octet-stream")
 		}
-
-		w.WriteHeader(http.StatusOK)
-
+		// w.WriteHeader(http.StatusOK)
 		// Simulate sending the file content
 		http.ServeFile(w, r, fileName)
 	}
