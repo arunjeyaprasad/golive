@@ -88,6 +88,7 @@ func StartJob(job *models.Job) error {
 
 	// Update job status to running
 	job.Status = string(JobStatusRunning)
+	job.StreamingStartedAt = time.Now().Format(time.RFC3339)
 	jobs[job.ID] = *job
 
 	return nil
@@ -110,6 +111,7 @@ func StopJob(jobID string) error {
 		return nil // Job not found
 	}
 	job.Status = string(JobStatusCompleted)
+	job.CompletedAt = time.Now().Format(time.RFC3339)
 	jobs[jobID] = job
 
 	return nil

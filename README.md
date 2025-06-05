@@ -5,8 +5,8 @@ Simple Go service to generate Live HLS and DASH Streams
 The service can be run standalone or within Docker container
 
 ## Direct Run
-Install golang if you don't have it already. Then run
-```go run main.go```
+Install golang if you don't have it already. Clone this repo and navigate to this directory and run
+```go run main.go``` from your favourite terminal
 
 ## Docker Run
 Build the Docker container using

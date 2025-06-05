@@ -1,12 +1,15 @@
 package models
 
 type Job struct {
-	ID          string `json:"id"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
-	PID         int    `json:"-"`
-	CreatedAt   string `json:"created_at"`
+	ID                 string `json:"id"`
+	Description        string `json:"description"`
+	Status             string `json:"status"`
+	PID                int    `json:"-"`
+	CreatedAt          string `json:"created"`
+	StreamingStartedAt string `json:"streamed_from,omitempty"`
+	CompletedAt        string `json:"completed,omitempty"`
 	JobFormat
+	PlaybackURLs []PlaybackURLs `json:"playback_urls,omitempty"`
 }
 
 type JobCreateRequest struct {
@@ -37,4 +40,9 @@ const (
 
 type JobFormat struct {
 	OutputFormat []JobOutputFormat `json:"output_format,omitempty"`
+}
+
+type PlaybackURLs struct {
+	Format JobOutputFormat `json:"format"`
+	URL    string          `json:"url"`
 }

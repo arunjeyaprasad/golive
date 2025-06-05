@@ -1,6 +1,7 @@
 package streamer
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 	"os/exec"
@@ -83,6 +84,18 @@ func (sp *StreamingProcess) buildCommand(job *models.Job) []string {
 
 	filterString := "[0:v]drawtext=text='REPLACE_ME':fontsize=42:fontcolor=white:x=50+500*abs(sin(t/2)):y=(h-text_h)/3:box=1:boxcolor=black@0.7,drawtext=text='Frame %{frame_num}':fontsize=28:fontcolor=cyan:x=10:y=h-40:box=1:boxcolor=black@0.7[v]; [1:a]aloop=loop=-1:size=22050[a]"
 	filterString = strings.ReplaceAll(filterString, "REPLACE_ME", text)
+	host := fmt.Sprintf("http://0.0.0.0:%d", config.DEFAULT_SERVER_PORT)
+	job.PlaybackURLs = []models.PlaybackURLs{
+		{
+			Format: models.JobOutputFormatDASH,
+			URL:    fmt.Sprintf("%s%s%s", host, string(os.PathSeparator), filepath.Join("jobs", job.ID, "manifest.mpd")),
+		},
+		{
+			Format: models.JobOutputFormatHLS,
+			URL:    fmt.Sprintf("%s%s%s", host, string(os.PathSeparator), filepath.Join("jobs", job.ID, "master.m3u8")),
+		},
+	}
+	slog.Info("Playback URLs for job", "jobID", job.ID, "urls", job.PlaybackURLs)
 	return []string{
 		"ffmpeg",
 		"-re",
@@ -171,7 +184,7 @@ func (sp *StreamingProcess) MonitorDirectory() error {
 				if event.Op&fsnotify.Create == fsnotify.Create {
 					// Ignore the .tmp files
 					if strings.HasSuffix(event.Name, ".m4s") || strings.HasSuffix(event.Name, ".ts") {
-						slog.Info("New media file created", "file", event.Name)
+						slog.Debug("New media file created", "file", event.Name)
 						sp.lastSegmentCreatedAt = time.Now().Unix()
 					}
 				}
