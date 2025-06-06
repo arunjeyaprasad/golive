@@ -1,3 +1,5 @@
+[![Go](https://github.com/arunjeyaprasad/golive/actions/workflows/go.yml/badge.svg)](https://github.com/arunjeyaprasad/golive/actions/workflows/go.yml)
+
 # golive
 Simple Go service to generate Live HLS and DASH Streams
 
