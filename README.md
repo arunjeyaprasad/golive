@@ -43,5 +43,5 @@ make dockerrun
 ```
 
 # ScreenShot
+<img src="./assets/output.gif" width="400" alt="Demo"/>
 
-![output](https://github.com/user-attachments/assets/265fc538-7374-4d03-ad69-a015befb1ca9)
