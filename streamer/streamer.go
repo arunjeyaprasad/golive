@@ -72,10 +72,10 @@ func (sp *StreamingProcess) StartJob() error {
 func (sp *StreamingProcess) buildCommand(job *models.Job) []string {
 	// Compute Filter complex using provided description
 	var text string
-	if job.Description == "" {
+	if job.Configuration.Description == "" {
 		text = "Test Live Stream"
 	} else {
-		text = job.Description
+		text = job.Configuration.Description
 	}
 	if len(text) > 50 {
 		text = text[:50] // Limit to 50 characters
@@ -100,20 +100,24 @@ func (sp *StreamingProcess) buildCommand(job *models.Job) []string {
 		"ffmpeg",
 		"-re",
 		"-f", "lavfi",
-		"-i", "testsrc=size=1280x720:rate=25",
+		"-i", fmt.Sprintf("testsrc=size=%s:rate=%s", job.Configuration.VideoTrack.Resolution, job.Configuration.VideoTrack.Framerate),
 		"-f", "lavfi",
 		"-i", "sine=frequency=1200:duration=0.03,afade=t=out:st=0.02:d=0.01,apad=pad_dur=0.97",
 		"-filter_complex", filterString,
 		"-map", "[v]",
 		"-map", "[a]",
-		"-c:v", "libx264",
+		"-c:v", job.Configuration.VideoTrack.Codec,
+		"-b:v", job.Configuration.VideoTrack.BitRate,
 		"-g", "150",
 		"-keyint_min", "150",
 		"-x264-params", "scenecut=0:open_gop=0",
 		"-preset", "fast",
-		"-c:a", "aac",
+		"-c:a", job.Configuration.AudioTrack.AudioCodec,
+		"-b:a", job.Configuration.AudioTrack.AudioBitrate,
+		"-ar", job.Configuration.AudioTrack.AudioSampleRate,
+		"-ac", job.Configuration.AudioTrack.AudioChannels,
 		"-f", "dash",
-		"-seg_duration", "6",
+		"-seg_duration", fmt.Sprintf("%d", job.Configuration.SegmentLength),
 		"-window_size", "6",
 		"-use_template", "1",
 		"-use_timeline", "1",
