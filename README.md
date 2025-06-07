@@ -69,6 +69,7 @@ Request Body:
         "window_size": 6
 }
 ```
+<ins><b>Note:</b></ins> Exception `description` field every other attribute is optional.
 
 Response
 ```json
