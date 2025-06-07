@@ -42,6 +42,108 @@ make dockerbuild
 make dockerrun
 ```
 
+# REST API
+### Create Stream
+```
+http
+
+POST http://localhost:9090/jobs
+```
+Request Body:
+```
+{
+        "description": "Ajz Test Live Stream",
+        "video": {
+            "bitrate": "1.2M",
+            "resolution": "1280x720",
+            "framerate": "30",
+            "codec": "h264"
+        },
+        "audio": {
+            "codec": "aac",
+            "bitrate": "192k",
+            "sample_rate": "44100",
+            "channels": "2"
+        },
+        "segment_length": 6,
+        "window_size": 6
+    }
+```
+
+Response
+```
+{
+    "id": "41877717-01cc-47a7-a960-efd73fdb0d2f",
+    "status": "created",
+    "created": "2025-06-07T20:11:05+05:30",
+    "config": {
+        "description": "Ajz Test Live Stream",
+        "video": {
+            "bitrate": "1.2M",
+            "resolution": "1280x720",
+            "framerate": "30",
+            "codec": "h264"
+        },
+        "audio": {
+            "codec": "aac",
+            "bitrate": "192k",
+            "sample_rate": "44100",
+            "channels": "2"
+        },
+        "segment_length": 6,
+        "window_size": 6
+    }
+}
+```
+
+## Get Stream
+```
+http
+GET http://localhost:9090/jobs/{{job_id}}
+```
+
+Response
+```
+{
+    "id": "f6deb708-eb18-4c0a-8a75-b414bb41f63a",
+    "status": "running",
+    "created": "2025-06-07T20:33:00+05:30",
+    "streamed_from": "2025-06-07T20:33:02+05:30",
+    "playback_urls": [
+        {
+            "format": "dash",
+            "url": "http://localhost:9090/jobs/f6deb708-eb18-4c0a-8a75-b414bb41f63a/manifest.mpd"
+        },
+        {
+            "format": "hls",
+            "url": "http://localhost:9090/jobs/f6deb708-eb18-4c0a-8a75-b414bb41f63a/master.m3u8"
+        }
+    ],
+    "config": {
+        "description": "Ajz Test Live Stream",
+        "video": {
+            "bitrate": "1.2M",
+            "resolution": "1280x720",
+            "framerate": "30",
+            "codec": "h264"
+        },
+        "audio": {
+            "codec": "aac",
+            "bitrate": "192k",
+            "sample_rate": "44100",
+            "channels": "2"
+        },
+        "segment_length": 6,
+        "window_size": 6
+    }
+}
+```
+Note: When the Job is in `running` state the playback URLs are also returned.
+
+You can use Safari browser to natively play the HLS streams. Alternatively use ffplay or VLC app to play the HLS/DASH URLs
+
 # ScreenShot
 <img src="./assets/output.gif" width="400" alt="Demo"/>
 
+# License
+This project is licensed under the MIT License
