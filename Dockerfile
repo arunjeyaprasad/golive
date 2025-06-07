@@ -17,7 +17,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o /app/golive main.go
+RUN CGO_ENABLED=0 go build -o /app/golive main.go
 
 # Setup the permissions
 RUN chmod +x /app/golive
