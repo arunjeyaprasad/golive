@@ -24,7 +24,12 @@ func createJobHandler() http.HandlerFunc {
 			http.Error(w, "Invalid request payload; Missing Description in Body", http.StatusBadRequest)
 			return
 		}
-		job = jobs.CreateJob(request.Description)
+		// Validate the request
+		if err := request.Validate(); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		job = jobs.CreateJob(request)
 		postprocessor.FormatResponse(w, job, http.StatusCreated)
 	}
 }

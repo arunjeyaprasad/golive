@@ -45,7 +45,7 @@ func TestStopJob(t *testing.T) {
 
 func TestCreateJob(t *testing.T) {
 	type args struct {
-		description string
+		request models.JobCreateRequest
 	}
 	tests := []struct {
 		name string
@@ -55,19 +55,21 @@ func TestCreateJob(t *testing.T) {
 		{
 			name: "Create job with valid description",
 			args: args{
-				description: "Test job",
+				request: models.JobCreateRequest{
+					Description: "Test job",
+				},
 			},
 		},
 	}
 	setup() // Call setup to clear the jobs map before each test
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := CreateJob(tt.args.description)
+			got := CreateJob(tt.args.request)
 			if got.ID == "" {
 				t.Errorf("CreateJob() returned job with empty ID")
 			}
-			if got.Description != tt.args.description {
-				t.Errorf("CreateJob() returned job with description = %v, want %v", got.Description, tt.args.description)
+			if got.Configuration.Description != tt.args.request.Description {
+				t.Errorf("CreateJob() returned job with description = %v, want %v", got.Configuration.Description, tt.args.request.Description)
 			}
 			if got.Status != string(JobStatusCreated) {
 				t.Errorf("CreateJob() returned job with status = %v, want %v", got.Status, JobStatusCreated)
@@ -87,22 +89,28 @@ func TestGetJobs(t *testing.T) {
 	// Initialize the jobs map with some test data
 	testJobs := []models.Job{
 		{
-			ID:          "job1",
-			Description: "Test job 1",
-			Status:      string(JobStatusCreated),
-			CreatedAt:   "2023-10-01T00:00:00Z",
+			ID:        "job1",
+			Status:    string(JobStatusCreated),
+			CreatedAt: "2023-10-01T00:00:00Z",
+			Configuration: models.JobCreateRequest{
+				Description: "Test job 1",
+			},
 		},
 		{
-			ID:          "job2",
-			Description: "Test job 2",
-			Status:      string(JobStatusRunning),
-			CreatedAt:   "2023-10-02T00:00:00Z",
+			ID:        "job2",
+			Status:    string(JobStatusRunning),
+			CreatedAt: "2023-10-02T00:00:00Z",
+			Configuration: models.JobCreateRequest{
+				Description: "Test job 2",
+			},
 		},
 		{
-			ID:          "job3",
-			Description: "Test job 3",
-			Status:      string(JobStatusCompleted),
-			CreatedAt:   "2023-10-03T00:00:00Z",
+			ID:        "job3",
+			Status:    string(JobStatusCompleted),
+			CreatedAt: "2023-10-03T00:00:00Z",
+			Configuration: models.JobCreateRequest{
+				Description: "Test job 3",
+			},
 		},
 	}
 	tests := []struct {
@@ -157,10 +165,12 @@ func TestGetJob(t *testing.T) {
 				id: "job1",
 			},
 			want: &models.Job{
-				ID:          "job1",
-				Description: "Test job 1",
-				Status:      string(JobStatusCreated),
-				CreatedAt:   "2023-10-01T00:00:00Z",
+				ID:        "job1",
+				Status:    string(JobStatusCreated),
+				CreatedAt: "2023-10-01T00:00:00Z",
+				Configuration: models.JobCreateRequest{
+					Description: "Test job 1",
+				},
 			},
 			want1: true,
 		},
@@ -179,10 +189,12 @@ func TestGetJob(t *testing.T) {
 	jobs[j.ID] = *j
 	// Add a second job to the jobs map
 	jobs["job2"] = models.Job{
-		ID:          "job2",
-		Description: "Test job 2",
-		Status:      string(JobStatusRunning),
-		CreatedAt:   "2023-10-02T00:00:00Z",
+		ID:        "job2",
+		Status:    string(JobStatusRunning),
+		CreatedAt: "2023-10-02T00:00:00Z",
+		Configuration: models.JobCreateRequest{
+			Description: "Test job 2",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -221,17 +233,21 @@ func TestDeleteJob(t *testing.T) {
 	setup() // Call setup to clear the jobs map before each test
 	// Add a test job to the jobs map
 	jobs["job1"] = models.Job{
-		ID:          "job1",
-		Description: "Test job 1",
-		Status:      string(JobStatusCreated),
-		CreatedAt:   "2023-10-01T00:00:00Z",
+		ID:        "job1",
+		Status:    string(JobStatusCreated),
+		CreatedAt: "2023-10-01T00:00:00Z",
+		Configuration: models.JobCreateRequest{
+			Description: "Test job 1",
+		},
 	}
 	// Add a second job to the jobs map
 	jobs["job2"] = models.Job{
-		ID:          "job2",
-		Description: "Test job 2",
-		Status:      string(JobStatusRunning),
-		CreatedAt:   "2023-10-02T00:00:00Z",
+		ID:        "job2",
+		Status:    string(JobStatusRunning),
+		CreatedAt: "2023-10-02T00:00:00Z",
+		Configuration: models.JobCreateRequest{
+			Description: "Test job 2",
+		},
 	}
 
 	for _, tt := range tests {

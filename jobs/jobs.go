@@ -33,12 +33,12 @@ func generateJobID() string {
 }
 
 // createJob creates a new job with the given description and adds it to the jobs map.
-func CreateJob(description string) *models.Job {
+func CreateJob(request models.JobCreateRequest) *models.Job {
 	job := models.Job{
-		ID:          generateJobID(),
-		Description: description,
-		Status:      string(JobStatusCreated),
-		CreatedAt:   time.Now().Format(time.RFC3339),
+		ID:            generateJobID(),
+		Status:        string(JobStatusCreated),
+		CreatedAt:     time.Now().Format(time.RFC3339),
+		Configuration: request,
 	}
 	jobs[job.ID] = job
 	return &job
