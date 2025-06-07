@@ -50,7 +50,7 @@ http
 POST http://localhost:9090/jobs
 ```
 Request Body:
-```
+```json
 {
         "description": "Ajz Test Live Stream",
         "video": {
@@ -67,11 +67,11 @@ Request Body:
         },
         "segment_length": 6,
         "window_size": 6
-    }
+}
 ```
 
 Response
-```
+```json
 {
     "id": "41877717-01cc-47a7-a960-efd73fdb0d2f",
     "status": "created",
@@ -103,7 +103,7 @@ GET http://localhost:9090/jobs/{{job_id}}
 ```
 
 Response
-```
+```json
 {
     "id": "f6deb708-eb18-4c0a-8a75-b414bb41f63a",
     "status": "running",
