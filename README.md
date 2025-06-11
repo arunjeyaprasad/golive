@@ -147,4 +147,4 @@ You can use Safari browser to natively play the HLS streams. Alternatively use f
 <img src="./assets/output.gif" width="400" alt="Demo"/>
 
 # License
-This project is licensed under the MIT License
+This project is licensed under the MIT [License](LICENSE)
